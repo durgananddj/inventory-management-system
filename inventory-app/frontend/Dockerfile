@@ -8,8 +8,8 @@ RUN npm ci --prefer-offline
 
 COPY . .
 
-# Pass API URL at build time; override in docker-compose or CI
-ARG VITE_API_URL=http://localhost:8000
+# Pass API URL at build time; Render build environments will inject this
+ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
@@ -21,11 +21,11 @@ FROM nginx:1.27-alpine AS runtime
 # Remove default config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# SPA-friendly nginx config
+# SPA-friendly nginx config set to port 10000 for Render
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 RUN printf 'server {\n\
-    listen 80;\n\
+    listen 10000;\n\
     root /usr/share/nginx/html;\n\
     index index.html;\n\
 \n\
@@ -44,6 +44,6 @@ RUN printf 'server {\n\
     gzip_types text/plain text/css application/javascript application/json;\n\
 }\n' > /etc/nginx/conf.d/app.conf
 
-EXPOSE 80
+EXPOSE 10000
 
 CMD ["nginx", "-g", "daemon off;"]
