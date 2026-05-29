@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/inventory
+      DATABASE_URL: postgresql://neondb_owner:npg_Si5yI0eaOPoT@ep-late-surf-aosraouz.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
     ports:
       - "8000:8000"
     depends_on:
