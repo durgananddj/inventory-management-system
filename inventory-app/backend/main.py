@@ -54,6 +54,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# --- Root Health Check Endpoint for Render ---
+@app.get("/")
+def read_root():
+    return {"status": "ok", "message": "Inventory Backend API is running perfectly on port 10000!"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
